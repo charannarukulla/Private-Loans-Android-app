@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Go Loans</string>
+    <string name="txt_nike_shoes">Nike Power-Run</string>
+    <string name="txt_buy">Buy</string>
+    <string name="Rupees">₹</string>
+    <string name="nike_power_run">Nike Power-Run</string>
+    <string name="txt_product_price">1</string>
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="ad_unit_id">ca-app-pub-3940256099942544/5224354917</string>
+
+    <string name="web_client_id">229979674241-qgnijmvjd30qdqa1gqet7raqjau9jg3t.apps.googleusercontent.com</string>
+    <array name="gender">
+        <item>TAP TO CHOOSE</item>
+        <item>MALE</item>
+        <item>FEMALE</item>
+        <item>OTHERS</item>
+    </array>
+    <array name="source">
+        <item>TAP TO CHOOSE</item>
+        <item>ACCOUNT TRANSFER</item>
+        <item>CHEQUE</item>
+        <item>CASH</item>
+    </array>
+    <array name="se">
+        <item>TAP TO CHOOSE</item>
+        <item>12-18(%/YEAR)</item>
+        <item>19-26(%/YEAR)</item>
+        <item>ABOVE26(%/YEAR)</item>
+    </array>
+    <array name="yn">
+        <item>TAP TO CHOOSE</item>
+        <item>YES</item>
+        <item>NO</item>
+
+    </array>
+    <array name="emptype">
+        <item>TAP TO CHOOSE</item>
+        <item>SALARIED</item>
+        <item>SELF EMPLOYED</item>
+        <item>BUSINESS MAN</item>
+    </array>
+    <array name="typeofln">
+        <item>TAP TO CHOOSE</item>
+        <item>PERSONAL LOAN</item>
+        <item>HOUSING LOAN</item>
+        <item>BUSINESS LOAN</item>
+    </array>
+</resources>

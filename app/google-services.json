@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "229979674241",
+    "firebase_url": "https://go-loans-3cde8.firebaseio.com",
+    "project_id": "go-loans-3cde8",
+    "storage_bucket": "go-loans-3cde8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229979674241:android:29c74e83462140290f9f80",
+        "android_client_info": {
+          "package_name": "com.cnst.goloans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229979674241-qgnijmvjd30qdqa1gqet7raqjau9jg3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb3UVsngSVpkYysLHp5lFfzROPjMmO3Sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229979674241-qgnijmvjd30qdqa1gqet7raqjau9jg3t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
