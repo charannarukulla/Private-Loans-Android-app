@@ -19,6 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +34,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +59,7 @@ public class fillform extends AppCompatActivity {
     Spinner share;
     EditText sal;
     EditText pan;
+    private AdView mAdView;
     String admin;
     EditText aadar;
     Spinner source;
@@ -64,6 +71,8 @@ public class fillform extends AppCompatActivity {
         setContentView(R.layout.activity_fillform);
         dob = findViewById(R.id.dobdisplay);
         fn = findViewById(R.id.fn);
+        MyClickListener listener = new MyClickListener();
+        FirebaseInAppMessaging.getInstance().addClickListener(listener);
         aadar = findViewById(R.id.aadar);
         pan = findViewById(R.id.pan);
         submit = findViewById(R.id.submit);
@@ -79,6 +88,16 @@ public class fillform extends AppCompatActivity {
         typeofloan = findViewById(R.id.typeofloan);
         pincode = findViewById(R.id.pincode);
         gender = findViewById(R.id.gender);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        // Display Banner ad
+        mAdView.loadAd(adRequest);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -87,7 +106,6 @@ public class fillform extends AppCompatActivity {
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
-
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {

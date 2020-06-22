@@ -57,6 +57,10 @@ btn2.setVisibility(View.INVISIBLE);
     @Override
     protected void onStart() {
         super.onStart();
+        if (getIntent().hasExtra("pushnotification")) {
+            Intent intent = new Intent(this, Notification.class);
+            startActivity(intent);
+            finish();}
         // Creates instance of the manager.
         final AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(Intro.this);
 
@@ -65,6 +69,7 @@ btn2.setVisibility(View.INVISIBLE);
 
 // Checks that the platform will allow the specified type of update.
         appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onSuccess(AppUpdateInfo appUpdateInfo) {
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE

@@ -1,6 +1,22 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6]'
+    }
+}
+repositories {
+    maven { url 'https://maven.google.com' }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+repositories {
+    maven { url 'https://maven.google.com' }
+}
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -10,11 +26,13 @@ android {
     }
     defaultConfig {
         applicationId "com.cnst.goloans"
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "demo"]
         minSdkVersion 20
         targetSdkVersion 29
-        versionCode 2
-        versionName "2.0"
+        versionCode 3
+        versionName "3.0"
         multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,7 +51,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // Recommended: Add the Firebase SDK for Google Analytics.
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
-
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.4'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     // Add the Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
     //noinspection GradleCompatible
@@ -45,6 +64,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     //noinspection GradleCompatible
     implementation 'com.android.support:cardview-v7:27.1.1'
+
+
     implementation 'com.google.android.gms:play-services-ads:19.0.1'
     implementation 'com.google.android.play:core:1.7.1'
     implementation 'com.jakewharton:butterknife:10.2.1'
@@ -63,5 +84,25 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.onesignal:OneSignal:3.12.6'
+}
+android {
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    defaultConfig {
+        manifestPlaceholders = [
+                onesignal_app_id               : '9d303342-65b3-4970-aa05-6a097c5530d6',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+        ]
+    }
 }
 apply plugin: 'com.google.gms.google-services'

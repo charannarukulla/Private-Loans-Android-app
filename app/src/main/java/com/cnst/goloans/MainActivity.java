@@ -2,17 +2,27 @@ package com.cnst.goloans;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +43,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.onesignal.OneSignal;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,14 +61,15 @@ TextView textView;
 Button signin;
 ImageView loading;
     //Tag for the logs optional
-
+onesignal onesignal;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     //creating a GoogleSignInClient object
     GoogleSignInClient mGoogleSignInClient;
-
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     //And also a Firebase Auth object
     FirebaseAuth mAuth;
-
+    private FrameLayout adContainerView;
+    private AdView adView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +78,35 @@ ImageView loading;
 loading=findViewById(R.id.loading);
 loading.setVisibility(View.INVISIBLE);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+
+        FirebaseMessaging.getInstance().subscribeToTopic("users")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (!task.isSuccessful()) {
+
+                        }
+
+                    }
+                });
+        OneSignal.startInit(this)
+                .setNotificationOpenedHandler(new onesignal(this))
+                .init();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        adContainerView = findViewById(R.id.ad_view_container);
+        // Step 1 - Create an AdView and set the ad unit ID on it.
+        adView = new AdView(this);
+        adView.setAdUnitId("ca-app-pub-9734806088592261/8411359095");
+        adContainerView.addView(adView);
+        loadBanner();
+
+
+    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
                 .requestEmail()
                 .build();
@@ -81,6 +123,41 @@ loading.setVisibility(View.INVISIBLE);
                 signIn();
             }
         });
+    }
+    private void loadBanner() {
+        // Create an ad request. Check your logcat output for the hashed device ID
+        // to get test ads on a physical device, e.g.,
+        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
+        // device."
+        AdRequest adRequest =
+                new AdRequest.Builder()
+                        .build();
+
+        AdSize adSize = getAdSize();
+        // Step 4 - Set the adaptive ad size on the ad view.
+        adView.setAdSize(adSize);
+
+        // Step 5 - Start loading the ad in the background.
+        adView.loadAd(adRequest);
+    }
+    private AdSize getAdSize() {
+        // Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density = outMetrics.density;
+
+        float adWidthPixels = adContainerView.getWidth();
+
+        // If the ad hasn't been laid out, default to the full screen width.
+        if (adWidthPixels == 0) {
+            adWidthPixels = outMetrics.widthPixels;
+        }
+
+        int adWidth = (int) (adWidthPixels / density);
+
+        return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth);
     }
     @Override
     protected void onStart() {
@@ -104,7 +181,7 @@ loading.setVisibility(View.INVISIBLE);
                         if (task.getResult().getString("filled") == null) {
                             Toast.makeText(MainActivity.this, "FILL THIS FORM", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this, fillform.class));
-                            finish();
+finish();
                         } else {
                             Toast.makeText(MainActivity.this, "WELCOME BACK  " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this, steptwo.class));
@@ -114,7 +191,7 @@ loading.setVisibility(View.INVISIBLE);
                     if (task.getResult().getString("type") != null){
                     if (task.getResult().getString("type").equals("admin")){
                         startActivity(new Intent(MainActivity.this,choose.class));
-                        finish();
+finish();
                     }
                 }}
             });
@@ -163,7 +240,7 @@ hideall();
                                     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                                     if (task.getResult().getString("type")=="admin"){
                                         startActivity(new Intent(MainActivity.this,choose.class));
-                                        finish();
+finish();
                                     }
                                     if (task.getResult().getString("filled")==null&&task.getResult().getString("type")==null)
                                     {
@@ -179,7 +256,7 @@ hideall();
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         startActivity(new Intent(MainActivity.this,fillform.class));
-                                                        finish();
+finish();
                                                         Toast.makeText(MainActivity.this, "YOU ARE NEW USER PLEASE FILL THIS APPLICATION", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }) .addOnFailureListener(new OnFailureListener() {
@@ -194,7 +271,7 @@ hideall();
                                     {
                                         Toast.makeText(MainActivity.this, "WELCOME BACK  "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(MainActivity.this,steptwo.class));
-                                        finish();
+finish();
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
